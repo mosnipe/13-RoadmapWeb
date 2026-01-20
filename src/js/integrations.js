@@ -21,6 +21,8 @@ class IntegrationsManager {
     this.setupEventListeners();
     this.loadSavedData();
     this.updatePreview();
+    // 初期状態でファイル読み込みタブを表示
+    this.switchTab('file');
   }
 
   setupEventListeners() {
@@ -97,24 +99,29 @@ class IntegrationsManager {
     const apiSection = document.getElementById('api-connection-section');
     const fileSection = document.getElementById('file-upload-section');
 
+    if (!tabApi || !tabFile || !apiSection || !fileSection) {
+      console.error('タブ要素が見つかりません');
+      return;
+    }
+
     if (tab === 'api') {
       // API接続タブをアクティブに
-      tabApi?.classList.remove('text-slate-400', 'border-transparent');
-      tabApi?.classList.add('text-primary', 'border-primary', 'border-b-2');
-      tabFile?.classList.remove('text-primary', 'border-primary', 'border-b-2');
-      tabFile?.classList.add('text-slate-400', 'border-transparent');
+      // タブのスタイルをリセット
+      tabApi.className = 'px-4 py-2 text-sm font-medium text-primary border-b-2 border-primary';
+      tabFile.className = 'px-4 py-2 text-sm font-medium text-slate-400 border-b-2 border-transparent hover:text-primary transition-colors';
       
-      apiSection?.classList.remove('hidden');
-      fileSection?.classList.add('hidden');
+      // セクションの表示/非表示
+      apiSection.classList.remove('hidden');
+      fileSection.classList.add('hidden');
     } else {
       // ファイル読み込みタブをアクティブに
-      tabFile?.classList.remove('text-slate-400', 'border-transparent');
-      tabFile?.classList.add('text-primary', 'border-primary', 'border-b-2');
-      tabApi?.classList.remove('text-primary', 'border-primary', 'border-b-2');
-      tabApi?.classList.add('text-slate-400', 'border-transparent');
+      // タブのスタイルをリセット
+      tabFile.className = 'px-4 py-2 text-sm font-medium text-primary border-b-2 border-primary';
+      tabApi.className = 'px-4 py-2 text-sm font-medium text-slate-400 border-b-2 border-transparent hover:text-primary transition-colors';
       
-      fileSection?.classList.remove('hidden');
-      apiSection?.classList.add('hidden');
+      // セクションの表示/非表示
+      fileSection.classList.remove('hidden');
+      apiSection.classList.add('hidden');
     }
   }
 
