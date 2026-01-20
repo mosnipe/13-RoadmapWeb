@@ -29,16 +29,20 @@ class IntegrationsManager {
     // タブ切り替え
     const tabApi = document.getElementById('tab-api');
     const tabFile = document.getElementById('tab-file');
-    const apiSection = document.getElementById('api-connection-section');
-    const fileSection = document.getElementById('file-upload-section');
 
-    tabApi?.addEventListener('click', () => {
-      this.switchTab('api');
-    });
+    if (tabApi) {
+      tabApi.addEventListener('click', (e) => {
+        e.preventDefault();
+        this.switchTab('api');
+      });
+    }
 
-    tabFile?.addEventListener('click', () => {
-      this.switchTab('file');
-    });
+    if (tabFile) {
+      tabFile.addEventListener('click', (e) => {
+        e.preventDefault();
+        this.switchTab('file');
+      });
+    }
 
     // GitHubファイルアップロード
     const prDropZone = document.getElementById('pr-drop-zone');
@@ -99,8 +103,13 @@ class IntegrationsManager {
     const apiSection = document.getElementById('api-connection-section');
     const fileSection = document.getElementById('file-upload-section');
 
-    if (!tabApi || !tabFile || !apiSection || !fileSection) {
+    if (!tabApi || !tabFile) {
       console.error('タブ要素が見つかりません');
+      return;
+    }
+
+    if (!apiSection || !fileSection) {
+      console.error('セクション要素が見つかりません');
       return;
     }
 
@@ -113,7 +122,7 @@ class IntegrationsManager {
       // セクションの表示/非表示
       apiSection.classList.remove('hidden');
       fileSection.classList.add('hidden');
-    } else {
+    } else if (tab === 'file') {
       // ファイル読み込みタブをアクティブに
       // タブのスタイルをリセット
       tabFile.className = 'px-4 py-2 text-sm font-medium text-primary border-b-2 border-primary';
@@ -245,11 +254,11 @@ class IntegrationsManager {
 
     targets.forEach(target => {
       const div = document.createElement('div');
-      div.className = 'p-2 bg-white rounded border border-slate-100 flex items-center justify-between';
+      div.className = 'p-2 bg-white dark:bg-white/5 rounded border border-slate-100 dark:border-white/5 flex items-center justify-between';
       
       div.innerHTML = `
-        <span class="text-xs text-slate-500">対象: <strong class="text-slate-900">${target.label}</strong></span>
-        <select class="column-mapping-select bg-transparent border-none text-[11px] font-bold text-primary p-0 focus:ring-0" data-target="${target.key}">
+        <span class="text-xs text-slate-500 dark:text-[#92c9a4]">対象: <strong class="text-slate-900 dark:text-white">${target.label}</strong></span>
+        <select class="column-mapping-select bg-transparent border-none text-[11px] font-bold text-primary p-0 focus:ring-0 text-slate-900 dark:text-white" data-target="${target.key}">
           <option value="">選択してください</option>
           ${columns.map(col => `
             <option value="${col}" ${this.columnMapping[target.key] === col ? 'selected' : ''}>${col}</option>
@@ -275,7 +284,7 @@ class IntegrationsManager {
     if (this.allRoadmapData.length === 0) {
       tbody.innerHTML = `
         <tr>
-          <td colspan="5" class="px-6 py-8 text-center text-slate-500">
+          <td colspan="5" class="px-6 py-8 text-center text-slate-500 dark:text-slate-400">
             データをアップロードしてください
           </td>
         </tr>
@@ -291,19 +300,19 @@ class IntegrationsManager {
         const statusClass = this.getStatusClass(item.status);
         
         return `
-          <tr class="hover:bg-slate-50 transition-colors">
+          <tr class="hover:bg-slate-50 dark:hover:bg-white/5 transition-colors">
             <td class="px-6 py-4">
               <div class="flex items-center gap-2">
                 <span class="material-symbols-outlined text-[16px] ${item.source === 'github' ? 'text-slate-400' : 'text-accent'}">${sourceIcon}</span>
                 <span class="text-xs ${item.source === 'github' ? 'font-mono' : ''}">${sourceLabel}</span>
               </div>
             </td>
-            <td class="px-6 py-4 text-slate-900 font-medium">${this.escapeHtml(item.title)}</td>
+            <td class="px-6 py-4 text-slate-900 dark:text-white font-medium">${this.escapeHtml(item.title)}</td>
             <td class="px-6 py-4">
               <span class="px-2 py-0.5 rounded text-[10px] ${statusClass}">${item.status}</span>
             </td>
-            <td class="px-6 py-4 text-slate-500">${this.escapeHtml(item.assignee)}</td>
-            <td class="px-6 py-4 text-slate-500">${this.formatDate(item.date)}</td>
+            <td class="px-6 py-4 text-slate-500 dark:text-[#92c9a4]">${this.escapeHtml(item.assignee)}</td>
+            <td class="px-6 py-4 text-slate-500 dark:text-[#92c9a4]">${this.formatDate(item.date)}</td>
           </tr>
         `;
       }).join('');
@@ -311,8 +320,8 @@ class IntegrationsManager {
     if (this.allRoadmapData.length > 10) {
       tbody.innerHTML += `
         <tr>
-          <td colspan="5" class="px-6 py-4 bg-slate-50 text-center">
-            <button class="text-xs font-bold text-slate-500 hover:text-primary uppercase tracking-widest">
+          <td colspan="5" class="px-6 py-4 bg-slate-50 dark:bg-white/5 text-center">
+            <button class="text-xs font-bold text-slate-500 dark:text-[#92c9a4] hover:text-white uppercase tracking-widest">
               すべての ${this.allRoadmapData.length} 件を表示
             </button>
           </td>
