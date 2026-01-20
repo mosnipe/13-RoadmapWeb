@@ -115,18 +115,16 @@ class IntegrationsManager {
 
     if (tab === 'api') {
       // API接続タブをアクティブに
-      // タブのスタイルをリセット
-      tabApi.className = 'px-4 py-2 text-sm font-medium text-primary border-b-2 border-primary';
-      tabFile.className = 'px-4 py-2 text-sm font-medium text-slate-400 border-b-2 border-transparent hover:text-primary transition-colors';
+      tabApi.className = 'tab-button tab-button-active';
+      tabFile.className = 'tab-button tab-button-inactive';
       
       // セクションの表示/非表示
       apiSection.classList.remove('hidden');
       fileSection.classList.add('hidden');
     } else if (tab === 'file') {
       // ファイル読み込みタブをアクティブに
-      // タブのスタイルをリセット
-      tabFile.className = 'px-4 py-2 text-sm font-medium text-primary border-b-2 border-primary';
-      tabApi.className = 'px-4 py-2 text-sm font-medium text-slate-400 border-b-2 border-transparent hover:text-primary transition-colors';
+      tabFile.className = 'tab-button tab-button-active';
+      tabApi.className = 'tab-button tab-button-inactive';
       
       // セクションの表示/非表示
       fileSection.classList.remove('hidden');
@@ -254,11 +252,11 @@ class IntegrationsManager {
 
     targets.forEach(target => {
       const div = document.createElement('div');
-      div.className = 'p-2 bg-white dark:bg-white/5 rounded border border-slate-100 dark:border-white/5 flex items-center justify-between';
+      div.className = 'column-mapping-item';
       
       div.innerHTML = `
-        <span class="text-xs text-slate-500 dark:text-[#92c9a4]">対象: <strong class="text-slate-900 dark:text-white">${target.label}</strong></span>
-        <select class="column-mapping-select bg-transparent border-none text-[11px] font-bold text-primary p-0 focus:ring-0 text-slate-900 dark:text-white" data-target="${target.key}">
+        <span class="text-xs text-slate-500">対象: <strong class="text-slate-900">${target.label}</strong></span>
+        <select class="column-mapping-select bg-transparent border-none text-[11px] font-bold text-primary p-0 focus:ring-0 text-slate-900" data-target="${target.key}">
           <option value="">選択してください</option>
           ${columns.map(col => `
             <option value="${col}" ${this.columnMapping[target.key] === col ? 'selected' : ''}>${col}</option>
@@ -363,10 +361,10 @@ class IntegrationsManager {
     const statusEl = document.getElementById('githubStatus');
     if (this.githubPRFile || this.githubIssueFile) {
       statusEl.textContent = '接続済み';
-      statusEl.className = 'px-2 py-1 rounded bg-primary/20 text-primary text-[10px] font-bold uppercase tracking-wider';
+      statusEl.className = 'status-badge status-badge-connected';
     } else {
       statusEl.textContent = '未接続';
-      statusEl.className = 'px-2 py-1 rounded bg-slate-100 text-slate-600 text-[10px] font-bold uppercase tracking-wider';
+      statusEl.className = 'status-badge status-badge-disconnected';
     }
   }
 

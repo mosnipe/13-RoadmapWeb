@@ -1,0 +1,31 @@
+/* ============================================
+   ロードマップページ - ステータスバッジスタイル
+   ============================================ */
+
+/* ステータスバッジ基本スタイル */
+.roadmap-status-badge {
+    padding: 0.125rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.75rem;
+    margin-left: 0.5rem;
+    border-width: 1px;
+}
+
+.roadmap-status-badge-merged,
+.roadmap-status-badge-completed {
+    background-color: rgba(59, 130, 246, 0.1);
+    color: #60a5fa;
+    border-color: rgba(59, 130, 246, 0.2);
+}
+
+.roadmap-status-badge-progress {
+    background-color: rgba(37, 99, 235, 0.1);
+    color: #2563eb;
+    border-color: rgba(37, 99, 235, 0.2);
+}
+
+.roadmap-status-badge-backlog {
+    background-color: rgba(100, 116, 139, 0.1);
+    color: #94a3b8;
+    border-color: rgba(100, 116, 139, 0.2);
+}

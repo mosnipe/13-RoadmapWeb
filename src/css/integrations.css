@@ -1,0 +1,59 @@
+/* ============================================
+   統合設定ページ専用スタイル
+   ============================================ */
+
+/* タブスタイル */
+.tab-button {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    border-bottom-width: 2px;
+    transition-property: color, border-color;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 150ms;
+}
+
+.tab-button-active {
+    color: #2563eb;
+    border-color: #2563eb;
+}
+
+.tab-button-inactive {
+    color: #94a3b8;
+    border-color: transparent;
+}
+
+.tab-button-inactive:hover {
+    color: #2563eb;
+}
+
+/* カラムマッピングアイテム */
+.column-mapping-item {
+    padding: 0.5rem;
+    background-color: #ffffff;
+    border-radius: 0.25rem;
+    border: 1px solid #e2e8f0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* ステータスバッジ */
+.status-badge {
+    padding: 0.125rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.625rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.status-badge-connected {
+    background-color: rgba(37, 99, 235, 0.2);
+    color: #2563eb;
+}
+
+.status-badge-disconnected {
+    background-color: #f1f5f9;
+    color: #475569;
+}

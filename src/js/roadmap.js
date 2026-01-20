@@ -165,17 +165,17 @@ class RoadmapViewer {
 
   getStatusBadge(status) {
     const statusUpper = status?.toUpperCase() || '';
-    let className = 'px-2 py-0.5 rounded text-xs ml-2';
+    let badgeClass = 'roadmap-status-badge';
     
     if (statusUpper.includes('MERGED') || statusUpper.includes('COMPLETED')) {
-      className += ' bg-blue-500/10 text-blue-400 border border-blue-500/20';
+      badgeClass += ' roadmap-status-badge-merged';
     } else if (statusUpper.includes('PROGRESS')) {
-      className += ' bg-primary/10 text-primary border border-primary/20';
+      badgeClass += ' roadmap-status-badge-progress';
     } else {
-      className += ' bg-slate-500/10 text-slate-400 border border-slate-500/20';
+      badgeClass += ' roadmap-status-badge-backlog';
     }
     
-    return `<span class="${className}">${this.escapeHtml(status)}</span>`;
+    return `<span class="${badgeClass}">${this.escapeHtml(status)}</span>`;
   }
 
   showEmptyState() {
