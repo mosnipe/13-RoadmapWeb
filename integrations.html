@@ -31,7 +31,7 @@
         }
     </script>
 </head>
-<body class="bg-white text-slate-900 min-h-screen">
+<body class="page-body">
     <div class="page-container">
         <!-- SideNavBar -->
         <aside class="sidebar">
@@ -48,15 +48,15 @@
                 <nav class="sidebar-nav">
                     <a class="sidebar-nav-item" href="index.html">
                         <span class="material-symbols-outlined">home</span>
-                        <span class="text-sm font-medium">ダッシュボード</span>
+                        <span class="text-sm font-medium sidebar-nav-text">ダッシュボード</span>
                     </a>
                     <a class="sidebar-nav-item sidebar-nav-item-active" href="integrations.html">
                         <span class="material-symbols-outlined">settings_input_component</span>
-                        <span class="text-sm font-medium">統合設定</span>
+                        <span class="text-sm font-medium sidebar-nav-text">統合設定</span>
                     </a>
                     <a class="sidebar-nav-item" href="roadmap.html">
                         <span class="material-symbols-outlined">map</span>
-                        <span class="text-sm font-medium">ロードマップ</span>
+                        <span class="text-sm font-medium sidebar-nav-text">ロードマップ</span>
                     </a>
                 </nav>
             </div>
@@ -72,7 +72,7 @@
                         <input class="search-input" placeholder="設定やリポジトリを検索..." type="text"/>
                     </div>
                 </div>
-                <div class="flex items-center gap-4">
+                <div class="flex-row flex-row-gap-md">
                     <button id="finalizeBtn" class="btn btn-primary btn-lg">
                         <span class="material-symbols-outlined text-lg">check_circle</span>
                         <span>ダッシュボードを確定</span>
@@ -96,7 +96,7 @@
                 </div>
 
                 <!-- Two Column Setup -->
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div class="grid-2-col-responsive">
                     <!-- GitHub Integration Card -->
                     <div class="card">
                         <div class="card-header">
@@ -113,7 +113,7 @@
                         </div>
                         <div class="card-body">
                             <!-- Connection Type Tabs -->
-                            <div class="flex gap-2 border-b border-slate-200">
+                            <div class="tab-container">
                                 <button type="button" id="tab-api" class="tab-button tab-button-inactive">
                                     API接続
                                 </button>
@@ -123,7 +123,7 @@
                             </div>
 
                             <!-- API Connection Section -->
-                            <div id="api-connection-section" class="space-y-4 hidden">
+                            <div id="api-connection-section" class="section hidden">
                                 <div class="form-group">
                                     <label class="form-label">リポジトリURL</label>
                                     <input type="text" id="github-repo-url" class="form-input" placeholder="https://github.com/owner/repo"/>
@@ -139,7 +139,7 @@
                             </div>
 
                             <!-- File Upload Section -->
-                            <div id="file-upload-section" class="space-y-4">
+                            <div id="file-upload-section" class="section">
                                 <div class="form-group">
                                     <label class="form-label">プルリクエスト (JSON)</label>
                                     <div id="pr-drop-zone" class="file-drop-zone file-upload-area">
@@ -162,7 +162,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div id="github-files-info" class="pt-4 border-t border-slate-100 text-sm text-slate-500 italic hidden">
+                                <div id="github-files-info" class="file-info-message hidden">
                                     <p>ファイルが読み込まれました</p>
                                 </div>
                             </div>
@@ -186,23 +186,23 @@
                         <div class="card-body">
                             <div id="csv-upload-area" class="file-upload-area">
                                 <div id="csv-file-info" class="hidden">
-                                    <div class="flex items-center justify-between mb-4">
-                                        <div class="flex items-center gap-2">
+                                    <div class="csv-file-header">
+                                        <div class="csv-file-name-row">
                                             <span class="material-symbols-outlined text-accent">description</span>
-                                            <span class="text-sm font-medium text-slate-900" id="csv-file-name">-</span>
+                                            <span class="csv-file-name" id="csv-file-name">-</span>
                                         </div>
-                                        <span class="text-[10px] text-slate-500" id="csv-file-size">-</span>
+                                        <span class="csv-file-size" id="csv-file-size">-</span>
                                     </div>
-                                    <div class="space-y-3">
-                                        <label class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">カラムマッピング</label>
-                                        <div class="grid grid-cols-2 gap-2" id="column-mapping">
+                                    <div class="csv-file-info">
+                                        <label class="column-mapping-label">カラムマッピング</label>
+                                        <div class="grid-2-col" id="column-mapping">
                                             <!-- 動的に生成 -->
                                         </div>
                                     </div>
                                 </div>
-                                <div id="csv-empty-state" class="text-center py-8">
-                                    <span class="material-symbols-outlined text-slate-400 text-4xl mb-2">upload_file</span>
-                                    <p class="text-sm text-slate-500">CSVまたはExcelファイルをアップロード</p>
+                                <div id="csv-empty-state" class="empty-state">
+                                    <span class="material-symbols-outlined empty-state-icon">upload_file</span>
+                                    <p class="empty-state-text">CSVまたはExcelファイルをアップロード</p>
                                     <input type="file" id="csv-file-input" accept=".csv,.xlsx,.xls" class="hidden"/>
                                 </div>
                             </div>
@@ -211,12 +211,12 @@
                 </div>
 
                 <!-- Preview Section -->
-                <div class="space-y-4">
-                    <div class="flex items-center justify-between">
-                        <h3 class="text-xl font-bold text-slate-900">データプレビュー</h3>
-                        <div class="flex items-center gap-2">
-                            <span class="size-2 rounded-full bg-primary animate-pulse"></span>
-                            <span class="text-xs text-slate-500">マッピングに合わせたライブプレビュー</span>
+                <div class="preview-section">
+                    <div class="preview-header">
+                        <h3 class="preview-title">データプレビュー</h3>
+                        <div class="preview-info">
+                            <span class="preview-indicator"></span>
+                            <span class="preview-hint">マッピングに合わせたライブプレビュー</span>
                         </div>
                     </div>
                     <div class="card">
@@ -248,7 +248,7 @@
                     <button id="reset-btn" class="btn btn-secondary">マッピングをリセット</button>
                     <button id="export-config-btn" class="btn btn-secondary">設定をエクスポート</button>
                 </div>
-                <div class="flex items-center gap-3">
+                <div class="flex-row flex-row-gap-lg">
                     <p class="footer-info">すべての変更は自動的にドラフトとして保存されます。</p>
                     <button id="save-btn" class="btn btn-primary btn-lg">
                         <span>保存して統合を確定</span>

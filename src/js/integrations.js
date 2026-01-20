@@ -239,32 +239,34 @@ class IntegrationsManager {
   async generateColumnMappingUI() {
     if (this.csvData.length === 0) return;
 
-    const columns = Object.keys(this.csvData[0]);
+    const csvColumns = Object.keys(this.csvData[0]);
     const mappingContainer = document.getElementById('column-mapping');
+    if (!mappingContainer) return;
+    
     mappingContainer.innerHTML = '';
 
-    const targets = [
+    const mappingTargets = [
       { key: 'title', label: 'タイトル' },
       { key: 'status', label: 'ステータス' },
       { key: 'assignee', label: '担当者' },
-      { key: 'date', label: '日付' }
+      { key: 'date', label: 'リリース予定日' }
     ];
 
-    targets.forEach(target => {
-      const div = document.createElement('div');
-      div.className = 'column-mapping-item';
+    mappingTargets.forEach(target => {
+      const mappingItem = document.createElement('div');
+      mappingItem.className = 'column-mapping-item';
       
-      div.innerHTML = `
+      mappingItem.innerHTML = `
         <span class="text-xs text-slate-500">対象: <strong class="text-slate-900">${target.label}</strong></span>
         <select class="column-mapping-select bg-transparent border-none text-[11px] font-bold text-primary p-0 focus:ring-0 text-slate-900" data-target="${target.key}">
           <option value="">選択してください</option>
-          ${columns.map(col => `
-            <option value="${col}" ${this.columnMapping[target.key] === col ? 'selected' : ''}>${col}</option>
+          ${csvColumns.map(column => `
+            <option value="${column}" ${this.columnMapping[target.key] === column ? 'selected' : ''}>${column}</option>
           `).join('')}
         </select>
       `;
       
-      mappingContainer.appendChild(div);
+      mappingContainer.appendChild(mappingItem);
     });
   }
 
@@ -291,36 +293,39 @@ class IntegrationsManager {
     }
 
     // プレビューテーブル生成（最大10件）
-    const previewData = this.allRoadmapData.slice(0, 10);
-      tbody.innerHTML = previewData.map(item => {
-        const sourceIcon = item.source === 'github' ? 'terminal' : 'table_chart';
-        const sourceLabel = item.source === 'github' ? item.sourceId : 'CSV';
-        const statusClass = this.getStatusClass(item.status);
-        
-        return `
-          <tr class="hover:bg-slate-50 dark:hover:bg-white/5 transition-colors">
-            <td class="px-6 py-4">
-              <div class="flex items-center gap-2">
-                <span class="material-symbols-outlined text-[16px] ${item.source === 'github' ? 'text-slate-400' : 'text-accent'}">${sourceIcon}</span>
-                <span class="text-xs ${item.source === 'github' ? 'font-mono' : ''}">${sourceLabel}</span>
-              </div>
-            </td>
-            <td class="px-6 py-4 text-slate-900 dark:text-white font-medium">${this.escapeHtml(item.title)}</td>
-            <td class="px-6 py-4">
-              <span class="px-2 py-0.5 rounded text-[10px] ${statusClass}">${item.status}</span>
-            </td>
-            <td class="px-6 py-4 text-slate-500 dark:text-[#92c9a4]">${this.escapeHtml(item.assignee)}</td>
-            <td class="px-6 py-4 text-slate-500 dark:text-[#92c9a4]">${this.formatDate(item.date)}</td>
-          </tr>
-        `;
-      }).join('');
+    const MAX_PREVIEW_ITEMS = 10;
+    const previewItems = this.allRoadmapData.slice(0, MAX_PREVIEW_ITEMS);
+    
+    tbody.innerHTML = previewItems.map(roadmapItem => {
+      const sourceIcon = roadmapItem.source === 'github' ? 'terminal' : 'table_chart';
+      const sourceLabel = roadmapItem.source === 'github' ? roadmapItem.sourceId : 'CSV';
+      const statusBadgeClass = this.getStatusClass(roadmapItem.status);
+      
+      return `
+        <tr>
+          <td>
+            <div class="flex items-center gap-2">
+              <span class="material-symbols-outlined text-[16px] ${roadmapItem.source === 'github' ? 'text-slate-400' : 'text-accent'}">${sourceIcon}</span>
+              <span class="text-xs ${roadmapItem.source === 'github' ? 'font-mono' : ''}">${sourceLabel}</span>
+            </div>
+          </td>
+          <td class="font-medium">${this.escapeHtml(roadmapItem.title)}</td>
+          <td>
+            <span class="px-2 py-0.5 rounded text-[10px] ${statusBadgeClass}">${roadmapItem.status}</span>
+          </td>
+          <td class="text-slate-500">${this.escapeHtml(roadmapItem.assignee)}</td>
+          <td class="text-slate-500">${this.formatDate(roadmapItem.date)}</td>
+        </tr>
+      `;
+    }).join('');
 
-    if (this.allRoadmapData.length > 10) {
+    if (this.allRoadmapData.length > MAX_PREVIEW_ITEMS) {
+      const totalCount = this.allRoadmapData.length;
       tbody.innerHTML += `
         <tr>
-          <td colspan="5" class="px-6 py-4 bg-slate-50 dark:bg-white/5 text-center">
-            <button class="text-xs font-bold text-slate-500 dark:text-[#92c9a4] hover:text-white uppercase tracking-widest">
-              すべての ${this.allRoadmapData.length} 件を表示
+          <td colspan="5" class="data-table-empty">
+            <button class="text-xs font-bold text-slate-500 hover:text-primary uppercase tracking-widest">
+              すべての ${totalCount} 件を表示
             </button>
           </td>
         </tr>

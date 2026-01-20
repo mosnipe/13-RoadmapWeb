@@ -57,3 +57,121 @@
     background-color: #f1f5f9;
     color: #475569;
 }
+
+/* ファイル情報表示 */
+.file-info-message {
+    padding-top: 1rem;
+    border-top: 1px solid #f1f5f9;
+    font-size: 0.875rem;
+    color: #64748b;
+    font-style: italic;
+}
+
+/* CSVファイル情報 */
+.csv-file-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.csv-file-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+
+.csv-file-name-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.csv-file-name {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #0f172a;
+}
+
+.csv-file-size {
+    font-size: 0.625rem;
+    color: #64748b;
+}
+
+/* 空の状態 */
+.empty-state {
+    text-align: center;
+    padding: 2rem 0;
+}
+
+.empty-state-icon {
+    color: #94a3b8;
+    font-size: 2.25rem;
+    margin-bottom: 0.5rem;
+}
+
+.empty-state-text {
+    font-size: 0.875rem;
+    color: #64748b;
+}
+
+/* プレビューセクション */
+.preview-section {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.preview-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.preview-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+.preview-info {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.preview-indicator {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 9999px;
+    background-color: #2563eb;
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.preview-hint {
+    font-size: 0.75rem;
+    color: #64748b;
+}
+
+/* タブコンテナ */
+.tab-container {
+    display: flex;
+    gap: 0.5rem;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+/* セクション */
+.section {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+/* カラムマッピングラベル */
+.column-mapping-label {
+    font-size: 0.625rem;
+    font-weight: 700;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
