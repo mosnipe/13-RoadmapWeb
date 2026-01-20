@@ -8,6 +8,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
     <link href="src/css/common.css" rel="stylesheet"/>
+    <link href="src/css/layout.css" rel="stylesheet"/>
+    <link href="src/css/components.css" rel="stylesheet"/>
     <link href="src/css/integrations.css" rel="stylesheet"/>
     <script id="tailwind-config">
         tailwind.config = {
@@ -30,29 +32,29 @@
     </script>
 </head>
 <body class="bg-white text-slate-900 min-h-screen">
-    <div class="flex h-screen overflow-hidden">
+    <div class="page-container">
         <!-- SideNavBar -->
-        <aside class="w-64 flex-shrink-0 border-r border-slate-200 bg-white hidden lg:flex flex-col">
-            <div class="p-6 flex flex-col h-full">
-                <div class="flex items-center gap-3 mb-8">
-                    <div class="size-8 bg-primary rounded flex items-center justify-center text-white">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">
+                    <div class="sidebar-logo-icon">
                         <span class="material-symbols-outlined font-bold">account_tree</span>
                     </div>
                     <div>
-                        <h1 class="text-slate-900 text-base font-bold leading-none">Mappin</h1>
-                        <p class="text-slate-500 text-xs font-normal mt-1">v1.0.2</p>
+                        <h1 class="sidebar-logo-text">Mappin</h1>
+                        <p class="sidebar-version">v1.0.2</p>
                     </div>
                 </div>
-                <nav class="flex-1 space-y-1">
-                    <a class="flex items-center gap-3 px-3 py-2 text-slate-600 hover:text-primary hover:bg-blue-50 transition-colors rounded-lg" href="index.html">
+                <nav class="sidebar-nav">
+                    <a class="sidebar-nav-item" href="index.html">
                         <span class="material-symbols-outlined">home</span>
                         <span class="text-sm font-medium">ダッシュボード</span>
                     </a>
-                    <a class="flex items-center gap-3 px-3 py-2 rounded-lg bg-primary/10 text-primary" href="integrations.html">
+                    <a class="sidebar-nav-item sidebar-nav-item-active" href="integrations.html">
                         <span class="material-symbols-outlined">settings_input_component</span>
                         <span class="text-sm font-medium">統合設定</span>
                     </a>
-                    <a class="flex items-center gap-3 px-3 py-2 text-slate-600 hover:text-primary hover:bg-blue-50 transition-colors rounded-lg" href="roadmap.html">
+                    <a class="sidebar-nav-item" href="roadmap.html">
                         <span class="material-symbols-outlined">map</span>
                         <span class="text-sm font-medium">ロードマップ</span>
                     </a>
@@ -61,17 +63,17 @@
         </aside>
 
         <!-- Main Content Area -->
-        <main class="flex-1 flex flex-col overflow-hidden">
+        <main class="main-content">
             <!-- TopNavBar -->
-            <header class="h-16 border-b border-slate-200 flex items-center justify-between px-8 bg-white z-10">
-                <div class="flex items-center gap-4 flex-1">
-                    <div class="relative w-full max-w-md">
-                        <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">search</span>
-                        <input class="w-full bg-slate-100 border-none rounded-lg pl-10 pr-4 py-2 text-sm focus:ring-2 focus:ring-primary placeholder:text-slate-500" placeholder="設定やリポジトリを検索..." type="text"/>
+            <header class="page-header">
+                <div class="search-container">
+                    <div class="search-box">
+                        <span class="material-symbols-outlined search-icon">search</span>
+                        <input class="search-input" placeholder="設定やリポジトリを検索..." type="text"/>
                     </div>
                 </div>
                 <div class="flex items-center gap-4">
-                    <button id="finalizeBtn" class="flex items-center gap-2 px-4 py-2 bg-primary text-white text-sm font-bold rounded-lg hover:bg-blue-600 transition-all">
+                    <button id="finalizeBtn" class="btn btn-primary btn-lg">
                         <span class="material-symbols-outlined text-lg">check_circle</span>
                         <span>ダッシュボードを確定</span>
                     </button>
@@ -79,84 +81,84 @@
             </header>
 
             <!-- Scrollable Content -->
-            <div class="flex-1 overflow-y-auto p-8 space-y-8">
+            <div class="content-area">
                 <!-- Breadcrumbs -->
-                <nav class="flex items-center gap-2 text-sm">
-                    <a class="text-slate-500 hover:text-primary transition-colors" href="index.html">設定</a>
-                    <span class="text-slate-400">/</span>
-                    <span class="text-slate-900 font-medium">データ統合・マッピング</span>
+                <nav class="breadcrumb">
+                    <a class="breadcrumb-link" href="index.html">設定</a>
+                    <span class="breadcrumb-separator">/</span>
+                    <span class="breadcrumb-current">データ統合・マッピング</span>
                 </nav>
 
                 <!-- PageHeading -->
-                <div class="flex flex-col gap-2">
-                    <h2 class="text-3xl font-black tracking-tight text-slate-900">インポートと設定</h2>
-                    <p class="text-slate-500 text-base max-w-2xl">開発ソースとプロダクトロードマップを接続します。カスタムファイルのカラムを内部データ構造にマッピングしてシームレスに同期します。</p>
+                <div class="page-title">
+                    <h2 class="page-title-heading">インポートと設定</h2>
+                    <p class="page-title-description">開発ソースとプロダクトロードマップを接続します。カスタムファイルのカラムを内部データ構造にマッピングしてシームレスに同期します。</p>
                 </div>
 
                 <!-- Two Column Setup -->
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     <!-- GitHub Integration Card -->
-                    <div class="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm flex flex-col">
-                        <div class="p-6 border-b border-slate-100 bg-slate-50 flex items-center justify-between">
-                            <div class="flex items-center gap-3">
-                                <div class="size-10 rounded bg-[#24292e] flex items-center justify-center text-white">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-header-content">
+                                <div class="card-header-icon card-header-icon-github">
                                     <span class="material-symbols-outlined">terminal</span>
                                 </div>
                                 <div>
-                                    <h3 class="font-bold text-slate-900">GitHub統合</h3>
-                                    <p class="text-xs text-slate-500">リリースノートのソース</p>
+                                    <h3 class="card-header-title">GitHub統合</h3>
+                                    <p class="card-header-subtitle">リリースノートのソース</p>
                                 </div>
                             </div>
                             <span id="githubStatus" class="status-badge status-badge-disconnected">未接続</span>
                         </div>
-                        <div class="p-6 space-y-6 flex-1">
+                        <div class="card-body">
                             <!-- Connection Type Tabs -->
                             <div class="flex gap-2 border-b border-slate-200">
-                                <button type="button" id="tab-api" class="px-4 py-2 text-sm font-medium text-slate-400 border-b-2 border-transparent hover:text-primary transition-colors">
+                                <button type="button" id="tab-api" class="tab-button tab-button-inactive">
                                     API接続
                                 </button>
-                                <button type="button" id="tab-file" class="px-4 py-2 text-sm font-medium text-primary border-b-2 border-primary">
+                                <button type="button" id="tab-file" class="tab-button tab-button-active">
                                     ファイル読み込み
                                 </button>
                             </div>
 
                             <!-- API Connection Section -->
                             <div id="api-connection-section" class="space-y-4 hidden">
-                                <div class="space-y-2">
-                                    <label class="text-xs font-semibold text-slate-500 uppercase tracking-wider">リポジトリURL</label>
-                                    <input type="text" id="github-repo-url" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2.5 text-sm text-slate-900 focus:ring-2 focus:ring-primary" placeholder="https://github.com/owner/repo"/>
+                                <div class="form-group">
+                                    <label class="form-label">リポジトリURL</label>
+                                    <input type="text" id="github-repo-url" class="form-input" placeholder="https://github.com/owner/repo"/>
                                 </div>
-                                <div class="space-y-2">
-                                    <label class="text-xs font-semibold text-slate-500 uppercase tracking-wider">パーソナルアクセストークン</label>
-                                    <input type="password" id="github-token" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2.5 text-sm text-slate-900 focus:ring-2 focus:ring-primary" placeholder="ghp_xxxxxxxxxxxx"/>
-                                    <p class="text-xs text-slate-500">プライベートリポジトリにアクセスする場合に必要です</p>
+                                <div class="form-group">
+                                    <label class="form-label">パーソナルアクセストークン</label>
+                                    <input type="password" id="github-token" class="form-input" placeholder="ghp_xxxxxxxxxxxx"/>
+                                    <p class="form-help-text">プライベートリポジトリにアクセスする場合に必要です</p>
                                 </div>
-                                <button id="test-connection-btn" class="w-full px-4 py-2 bg-primary text-white rounded-lg hover:bg-blue-600 transition-colors text-sm font-medium">
+                                <button id="test-connection-btn" class="btn btn-primary w-full">
                                     接続をテスト
                                 </button>
                             </div>
 
                             <!-- File Upload Section -->
                             <div id="file-upload-section" class="space-y-4">
-                                <div class="space-y-2">
-                                    <label class="text-xs font-semibold text-slate-500 uppercase tracking-wider">プルリクエスト (JSON)</label>
-                                    <div id="pr-drop-zone" class="file-drop-zone rounded-lg border border-dashed border-slate-200 p-4 bg-slate-50 cursor-pointer hover:border-primary transition-colors">
+                                <div class="form-group">
+                                    <label class="form-label">プルリクエスト (JSON)</label>
+                                    <div id="pr-drop-zone" class="file-drop-zone file-upload-area">
                                         <input type="file" id="pr-file-input" accept=".json" class="hidden"/>
-                                        <div class="text-center">
-                                            <span class="material-symbols-outlined text-primary text-3xl mb-2">cloud_upload</span>
-                                            <p class="text-sm text-slate-600">ドラッグ&ドロップまたはクリック</p>
-                                            <p class="text-xs text-slate-500 mt-1" id="pr-file-name">ファイルを選択</p>
+                                        <div class="file-upload-content">
+                                            <span class="material-symbols-outlined file-upload-icon">cloud_upload</span>
+                                            <p class="file-upload-text">ドラッグ&ドロップまたはクリック</p>
+                                            <p class="file-upload-hint" id="pr-file-name">ファイルを選択</p>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="space-y-2">
-                                    <label class="text-xs font-semibold text-slate-500 uppercase tracking-wider">イシュー (JSON)</label>
-                                    <div id="issue-drop-zone" class="file-drop-zone rounded-lg border border-dashed border-slate-200 p-4 bg-slate-50 cursor-pointer hover:border-primary transition-colors">
+                                <div class="form-group">
+                                    <label class="form-label">イシュー (JSON)</label>
+                                    <div id="issue-drop-zone" class="file-drop-zone file-upload-area">
                                         <input type="file" id="issue-file-input" accept=".json" class="hidden"/>
-                                        <div class="text-center">
-                                            <span class="material-symbols-outlined text-primary text-3xl mb-2">cloud_upload</span>
-                                            <p class="text-sm text-slate-600">ドラッグ&ドロップまたはクリック</p>
-                                            <p class="text-xs text-slate-500 mt-1" id="issue-file-name">ファイルを選択</p>
+                                        <div class="file-upload-content">
+                                            <span class="material-symbols-outlined file-upload-icon">cloud_upload</span>
+                                            <p class="file-upload-text">ドラッグ&ドロップまたはクリック</p>
+                                            <p class="file-upload-hint" id="issue-file-name">ファイルを選択</p>
                                         </div>
                                     </div>
                                 </div>
@@ -168,21 +170,21 @@
                     </div>
 
                     <!-- Excel/CSV Integration Card -->
-                    <div class="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm flex flex-col">
-                        <div class="p-6 border-b border-slate-100 bg-slate-50 flex items-center justify-between">
-                            <div class="flex items-center gap-3">
-                                <div class="size-10 rounded bg-accent flex items-center justify-center text-white">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-header-content">
+                                <div class="card-header-icon card-header-icon-roadmap">
                                     <span class="material-symbols-outlined">table_chart</span>
                                 </div>
                                 <div>
-                                    <h3 class="font-bold text-slate-900">ロードマップインポート</h3>
-                                    <p class="text-xs text-slate-500">Excel/CSVデータマッピング</p>
+                                    <h3 class="card-header-title">ロードマップインポート</h3>
+                                    <p class="card-header-subtitle">Excel/CSVデータマッピング</p>
                                 </div>
                             </div>
-                            <button id="upload-csv-btn" class="px-3 py-1.5 bg-accent text-white rounded text-xs font-bold hover:bg-orange-600 transition-colors">新規アップロード</button>
+                            <button id="upload-csv-btn" class="btn btn-accent btn-sm">新規アップロード</button>
                         </div>
-                        <div class="p-6 space-y-4 flex-1">
-                            <div id="csv-upload-area" class="rounded-lg border border-dashed border-slate-200 p-4 bg-slate-50">
+                        <div class="card-body">
+                            <div id="csv-upload-area" class="file-upload-area">
                                 <div id="csv-file-info" class="hidden">
                                     <div class="flex items-center justify-between mb-4">
                                         <div class="flex items-center gap-2">
@@ -211,26 +213,26 @@
                 <!-- Preview Section -->
                 <div class="space-y-4">
                     <div class="flex items-center justify-between">
-                        <h3 class="text-xl font-bold text-slate-900 dark:text-white">データプレビュー</h3>
+                        <h3 class="text-xl font-bold text-slate-900">データプレビュー</h3>
                         <div class="flex items-center gap-2">
                             <span class="size-2 rounded-full bg-primary animate-pulse"></span>
-                            <span class="text-xs text-slate-500 dark:text-slate-400">マッピングに合わせたライブプレビュー</span>
+                            <span class="text-xs text-slate-500">マッピングに合わせたライブプレビュー</span>
                         </div>
                     </div>
-                    <div class="bg-white dark:bg-[#193322] border border-slate-200 dark:border-white/5 rounded-xl overflow-hidden">
-                        <table class="w-full text-left border-collapse">
-                            <thead class="bg-slate-50 dark:bg-white/5 text-slate-400 text-[10px] uppercase font-bold tracking-wider">
+                    <div class="card">
+                        <table class="data-table">
+                            <thead>
                                 <tr>
-                                    <th class="px-6 py-4">ソース</th>
-                                    <th class="px-6 py-4">タイトル</th>
-                                    <th class="px-6 py-4">ステータス</th>
-                                    <th class="px-6 py-4">担当者</th>
-                                    <th class="px-6 py-4">リリース予定日</th>
+                                    <th>ソース</th>
+                                    <th>タイトル</th>
+                                    <th>ステータス</th>
+                                    <th>担当者</th>
+                                    <th>リリース予定日</th>
                                 </tr>
                             </thead>
-                            <tbody id="preview-table-body" class="divide-y divide-slate-100 dark:divide-white/5 text-sm">
+                            <tbody id="preview-table-body">
                                 <tr>
-                                    <td colspan="5" class="px-6 py-8 text-center text-slate-500 dark:text-slate-400">
+                                    <td colspan="5" class="data-table-empty">
                                         データをアップロードしてください
                                     </td>
                                 </tr>
@@ -241,14 +243,14 @@
             </div>
 
             <!-- Sticky Footer for Actions -->
-            <footer class="h-20 border-t border-slate-200 dark:border-white/10 bg-white dark:bg-background-dark/80 backdrop-blur-md px-8 flex items-center justify-between">
-                <div class="flex items-center gap-4">
-                    <button id="reset-btn" class="px-4 py-2 text-slate-500 hover:text-white text-sm font-medium transition-colors">マッピングをリセット</button>
-                    <button id="export-config-btn" class="px-4 py-2 text-slate-500 hover:text-white text-sm font-medium transition-colors">設定をエクスポート</button>
+            <footer class="page-footer">
+                <div class="footer-actions">
+                    <button id="reset-btn" class="btn btn-secondary">マッピングをリセット</button>
+                    <button id="export-config-btn" class="btn btn-secondary">設定をエクスポート</button>
                 </div>
                 <div class="flex items-center gap-3">
-                    <p class="text-xs text-slate-400 hidden sm:block">すべての変更は自動的にドラフトとして保存されます。</p>
-                    <button id="save-btn" class="flex items-center gap-2 px-6 py-2.5 bg-primary text-background-dark text-sm font-bold rounded-lg hover:shadow-[0_0_20px_rgba(19,236,91,0.3)] transition-all">
+                    <p class="footer-info">すべての変更は自動的にドラフトとして保存されます。</p>
+                    <button id="save-btn" class="btn btn-primary btn-lg">
                         <span>保存して統合を確定</span>
                         <span class="material-symbols-outlined text-lg">arrow_forward</span>
                     </button>
