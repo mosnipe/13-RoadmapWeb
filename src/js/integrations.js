@@ -30,18 +30,30 @@ class IntegrationsManager {
     const tabApi = document.getElementById('tab-api');
     const tabFile = document.getElementById('tab-file');
 
+    console.log('[DEBUG] setupEventListeners開始');
+    console.log('[DEBUG] tab-api要素:', tabApi);
+    console.log('[DEBUG] tab-file要素:', tabFile);
+
     if (tabApi) {
+      console.log('[DEBUG] tab-apiのイベントリスナーを設定します');
       tabApi.addEventListener('click', (e) => {
+        console.log('[DEBUG] tab-apiがクリックされました');
         e.preventDefault();
         this.switchTab('api');
       });
+    } else {
+      console.error('[DEBUG] tab-api要素が見つかりませんでした');
     }
 
     if (tabFile) {
+      console.log('[DEBUG] tab-fileのイベントリスナーを設定します');
       tabFile.addEventListener('click', (e) => {
+        console.log('[DEBUG] tab-fileがクリックされました');
         e.preventDefault();
         this.switchTab('file');
       });
+    } else {
+      console.error('[DEBUG] tab-file要素が見つかりませんでした');
     }
 
     // GitHubファイルアップロード
@@ -98,18 +110,25 @@ class IntegrationsManager {
   }
 
   switchTab(tab) {
+    console.log('[DEBUG] switchTab呼び出し:', tab);
     const tabApi = document.getElementById('tab-api');
     const tabFile = document.getElementById('tab-file');
     const apiSection = document.getElementById('api-connection-section');
     const fileSection = document.getElementById('file-upload-section');
 
+    console.log('[DEBUG] 要素の取得結果:');
+    console.log('  - tabApi:', tabApi);
+    console.log('  - tabFile:', tabFile);
+    console.log('  - apiSection:', apiSection);
+    console.log('  - fileSection:', fileSection);
+
     if (!tabApi || !tabFile) {
-      console.error('タブ要素が見つかりません');
+      console.error('[DEBUG] タブ要素が見つかりません');
       return;
     }
 
     if (!apiSection || !fileSection) {
-      console.error('セクション要素が見つかりません');
+      console.error('[DEBUG] セクション要素が見つかりません');
       return;
     }
 
