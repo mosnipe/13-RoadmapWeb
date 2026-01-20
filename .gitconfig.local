@@ -1,0 +1,14 @@
+# ローカルGit設定（このプロジェクト用）
+# このファイルをプロジェクトのルートに配置し、以下のコマンドで適用:
+# git config --local include.path .gitconfig.local
+
+[commit]
+    template = .gitmessage
+    verbose = true
+
+[i18n]
+    commitEncoding = utf-8
+    logOutputEncoding = utf-8
+
+[core]
+    quotepath = false

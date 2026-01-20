@@ -21,6 +21,16 @@ npm run dev
 
 ブラウザで `http://localhost:8080` を開いてください。
 
+### Git設定（初回のみ）
+
+コミットメッセージのテンプレートを設定する場合：
+
+```bash
+git config --local commit.template .gitmessage
+```
+
+これにより、`git commit` を実行すると日本語のコミットメッセージテンプレートが表示されます。
+
 ## 使用方法
 
 ### 1. 開発サーバーの起動

@@ -24,6 +24,20 @@ class IntegrationsManager {
   }
 
   setupEventListeners() {
+    // タブ切り替え
+    const tabApi = document.getElementById('tab-api');
+    const tabFile = document.getElementById('tab-file');
+    const apiSection = document.getElementById('api-connection-section');
+    const fileSection = document.getElementById('file-upload-section');
+
+    tabApi?.addEventListener('click', () => {
+      this.switchTab('api');
+    });
+
+    tabFile?.addEventListener('click', () => {
+      this.switchTab('file');
+    });
+
     // GitHubファイルアップロード
     const prDropZone = document.getElementById('pr-drop-zone');
     const prFileInput = document.getElementById('pr-file-input');
@@ -75,6 +89,33 @@ class IntegrationsManager {
     document.getElementById('finalizeBtn')?.addEventListener('click', () => {
       window.location.href = 'roadmap.html';
     });
+  }
+
+  switchTab(tab) {
+    const tabApi = document.getElementById('tab-api');
+    const tabFile = document.getElementById('tab-file');
+    const apiSection = document.getElementById('api-connection-section');
+    const fileSection = document.getElementById('file-upload-section');
+
+    if (tab === 'api') {
+      // API接続タブをアクティブに
+      tabApi?.classList.remove('text-slate-400', 'border-transparent');
+      tabApi?.classList.add('text-primary', 'border-primary', 'border-b-2');
+      tabFile?.classList.remove('text-primary', 'border-primary', 'border-b-2');
+      tabFile?.classList.add('text-slate-400', 'border-transparent');
+      
+      apiSection?.classList.remove('hidden');
+      fileSection?.classList.add('hidden');
+    } else {
+      // ファイル読み込みタブをアクティブに
+      tabFile?.classList.remove('text-slate-400', 'border-transparent');
+      tabFile?.classList.add('text-primary', 'border-primary', 'border-b-2');
+      tabApi?.classList.remove('text-primary', 'border-primary', 'border-b-2');
+      tabApi?.classList.add('text-slate-400', 'border-transparent');
+      
+      fileSection?.classList.remove('hidden');
+      apiSection?.classList.add('hidden');
+    }
   }
 
   setupFileDropZone(dropZone, fileInput, callback) {
@@ -189,18 +230,18 @@ class IntegrationsManager {
     mappingContainer.innerHTML = '';
 
     const targets = [
-      { key: 'title', label: 'Title' },
-      { key: 'status', label: 'Status' },
-      { key: 'assignee', label: 'Assignee' },
-      { key: 'date', label: 'Date' }
+      { key: 'title', label: 'タイトル' },
+      { key: 'status', label: 'ステータス' },
+      { key: 'assignee', label: '担当者' },
+      { key: 'date', label: '日付' }
     ];
 
     targets.forEach(target => {
       const div = document.createElement('div');
-      div.className = 'p-2 bg-white dark:bg-white/5 rounded border border-slate-100 dark:border-white/5 flex items-center justify-between';
+      div.className = 'p-2 bg-white rounded border border-slate-100 flex items-center justify-between';
       
       div.innerHTML = `
-        <span class="text-xs text-slate-500">Target: <strong class="text-slate-900 dark:text-white">${target.label}</strong></span>
+        <span class="text-xs text-slate-500">対象: <strong class="text-slate-900">${target.label}</strong></span>
         <select class="column-mapping-select bg-transparent border-none text-[11px] font-bold text-primary p-0 focus:ring-0" data-target="${target.key}">
           <option value="">選択してください</option>
           ${columns.map(col => `
@@ -227,7 +268,7 @@ class IntegrationsManager {
     if (this.allRoadmapData.length === 0) {
       tbody.innerHTML = `
         <tr>
-          <td colspan="5" class="px-6 py-8 text-center text-slate-500 dark:text-slate-400">
+          <td colspan="5" class="px-6 py-8 text-center text-slate-500">
             データをアップロードしてください
           </td>
         </tr>
@@ -237,35 +278,35 @@ class IntegrationsManager {
 
     // プレビューテーブル生成（最大10件）
     const previewData = this.allRoadmapData.slice(0, 10);
-    tbody.innerHTML = previewData.map(item => {
-      const sourceIcon = item.source === 'github' ? 'terminal' : 'table_chart';
-      const sourceLabel = item.source === 'github' ? item.sourceId : 'CSV';
-      const statusClass = this.getStatusClass(item.status);
-      
-      return `
-        <tr class="hover:bg-slate-50 dark:hover:bg-white/5 transition-colors">
-          <td class="px-6 py-4">
-            <div class="flex items-center gap-2">
-              <span class="material-symbols-outlined text-[16px] ${item.source === 'github' ? 'text-slate-400' : 'text-primary'}">${sourceIcon}</span>
-              <span class="text-xs ${item.source === 'github' ? 'font-mono' : ''}">${sourceLabel}</span>
-            </div>
-          </td>
-          <td class="px-6 py-4 text-slate-900 dark:text-white font-medium">${this.escapeHtml(item.title)}</td>
-          <td class="px-6 py-4">
-            <span class="px-2 py-0.5 rounded text-[10px] ${statusClass}">${item.status}</span>
-          </td>
-          <td class="px-6 py-4 text-slate-500 dark:text-[#92c9a4]">${this.escapeHtml(item.assignee)}</td>
-          <td class="px-6 py-4 text-slate-500 dark:text-[#92c9a4]">${this.formatDate(item.date)}</td>
-        </tr>
-      `;
-    }).join('');
+      tbody.innerHTML = previewData.map(item => {
+        const sourceIcon = item.source === 'github' ? 'terminal' : 'table_chart';
+        const sourceLabel = item.source === 'github' ? item.sourceId : 'CSV';
+        const statusClass = this.getStatusClass(item.status);
+        
+        return `
+          <tr class="hover:bg-slate-50 transition-colors">
+            <td class="px-6 py-4">
+              <div class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-[16px] ${item.source === 'github' ? 'text-slate-400' : 'text-accent'}">${sourceIcon}</span>
+                <span class="text-xs ${item.source === 'github' ? 'font-mono' : ''}">${sourceLabel}</span>
+              </div>
+            </td>
+            <td class="px-6 py-4 text-slate-900 font-medium">${this.escapeHtml(item.title)}</td>
+            <td class="px-6 py-4">
+              <span class="px-2 py-0.5 rounded text-[10px] ${statusClass}">${item.status}</span>
+            </td>
+            <td class="px-6 py-4 text-slate-500">${this.escapeHtml(item.assignee)}</td>
+            <td class="px-6 py-4 text-slate-500">${this.formatDate(item.date)}</td>
+          </tr>
+        `;
+      }).join('');
 
     if (this.allRoadmapData.length > 10) {
       tbody.innerHTML += `
         <tr>
-          <td colspan="5" class="px-6 py-4 bg-slate-50 dark:bg-white/5 text-center">
-            <button class="text-xs font-bold text-slate-500 dark:text-[#92c9a4] hover:text-white uppercase tracking-widest">
-              Show all ${this.allRoadmapData.length} entries
+          <td colspan="5" class="px-6 py-4 bg-slate-50 text-center">
+            <button class="text-xs font-bold text-slate-500 hover:text-primary uppercase tracking-widest">
+              すべての ${this.allRoadmapData.length} 件を表示
             </button>
           </td>
         </tr>
@@ -276,12 +317,12 @@ class IntegrationsManager {
   getStatusClass(status) {
     const statusUpper = status?.toUpperCase() || '';
     if (statusUpper.includes('MERGED') || statusUpper.includes('COMPLETED')) {
-      return 'bg-blue-500/10 text-blue-400 border border-blue-500/20';
+      return 'bg-blue-500/10 text-blue-600 border border-blue-500/20';
     }
     if (statusUpper.includes('PROGRESS')) {
       return 'bg-primary/10 text-primary border border-primary/20';
     }
-    return 'bg-slate-500/10 text-slate-400 border border-slate-500/20';
+    return 'bg-slate-100 text-slate-600 border border-slate-200';
   }
 
   formatDate(dateString) {
@@ -305,11 +346,11 @@ class IntegrationsManager {
   updateGitHubStatus() {
     const statusEl = document.getElementById('githubStatus');
     if (this.githubPRFile || this.githubIssueFile) {
-      statusEl.textContent = 'Connected';
+      statusEl.textContent = '接続済み';
       statusEl.className = 'px-2 py-1 rounded bg-primary/20 text-primary text-[10px] font-bold uppercase tracking-wider';
     } else {
-      statusEl.textContent = 'Not Connected';
-      statusEl.className = 'px-2 py-1 rounded bg-slate-500/20 text-slate-400 text-[10px] font-bold uppercase tracking-wider';
+      statusEl.textContent = '未接続';
+      statusEl.className = 'px-2 py-1 rounded bg-slate-100 text-slate-600 text-[10px] font-bold uppercase tracking-wider';
     }
   }
 
