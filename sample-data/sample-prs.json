@@ -1,0 +1,24 @@
+[
+  {
+    "number": 821,
+    "title": "Refactor Authentication Middleware",
+    "state": "MERGED",
+    "author": {
+      "login": "j.doe"
+    },
+    "createdAt": "2023-10-20T10:00:00Z",
+    "mergedAt": "2023-10-24T15:30:00Z",
+    "url": "https://github.com/example/repo/pull/821"
+  },
+  {
+    "number": 844,
+    "title": "Fix: PDF Export Layout issues",
+    "state": "MERGED",
+    "author": {
+      "login": "k.wilson"
+    },
+    "createdAt": "2023-10-25T09:00:00Z",
+    "mergedAt": "2023-10-28T14:20:00Z",
+    "url": "https://github.com/example/repo/pull/844"
+  }
+]
