@@ -1,0 +1,35 @@
+/* ============================================
+   ロードマップページ専用スタイル
+   ============================================ */
+
+/* ロードマップページのフォント設定（Noto Sans JPを含む） */
+body {
+    font-family: 'Inter', 'Noto Sans JP', sans-serif;
+}
+
+/* タイムラインの縦線 */
+.timeline-line {
+    position: absolute;
+    left: 23.5px;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background-color: #e2e8f0;
+}
+
+.dark .timeline-line {
+    background-color: #334155;
+}
+
+/* 点線 */
+.dotted-line {
+    background-image: linear-gradient(to right, #cbd5e1 33%, rgba(255,255,255,0) 0%);
+    background-position: bottom;
+    background-size: 6px 1px;
+    background-repeat: repeat-x;
+    height: 1px;
+}
+
+.dark .dotted-line {
+    background-image: linear-gradient(to right, #475569 33%, rgba(255,255,255,0) 0%);
+}

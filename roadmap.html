@@ -8,6 +8,8 @@
     <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet"/>
+    <link href="src/css/common.css" rel="stylesheet"/>
+    <link href="src/css/roadmap.css" rel="stylesheet"/>
     <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
     <script>
         tailwind.config = {
@@ -30,32 +32,6 @@
             },
         };
     </script>
-    <style>
-        body {
-            font-family: 'Inter', 'Noto Sans JP', sans-serif;
-        }
-        .timeline-line {
-            position: absolute;
-            left: 23.5px;
-            top: 0;
-            bottom: 0;
-            width: 1px;
-            background-color: #e2e8f0;
-        }
-        .dark .timeline-line {
-            background-color: #334155;
-        }
-        .dotted-line {
-            background-image: linear-gradient(to right, #cbd5e1 33%, rgba(255,255,255,0) 0%);
-            background-position: bottom;
-            background-size: 6px 1px;
-            background-repeat: repeat-x;
-            height: 1px;
-        }
-        .dark .dotted-line {
-            background-image: linear-gradient(to right, #475569 33%, rgba(255,255,255,0) 0%);
-        }
-    </style>
 </head>
 <body class="bg-background-light dark:bg-background-dark text-slate-800 dark:text-slate-200 min-h-screen transition-colors duration-200">
     <div class="max-w-4xl mx-auto px-6 py-12 lg:py-20">

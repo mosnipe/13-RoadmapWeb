@@ -1,0 +1,23 @@
+/* ============================================
+   共通スタイル
+   ============================================ */
+
+/* Material Icons */
+.material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+/* 基本フォント設定 */
+body {
+    font-family: 'Inter', sans-serif;
+}
+
+/* ファイルドロップゾーン */
+.file-drop-zone {
+    transition: all 0.3s ease;
+}
+
+.file-drop-zone.drag-over {
+    background-color: rgba(19, 236, 91, 0.1);
+    border-color: #13ec5b;
+}
