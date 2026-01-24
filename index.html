@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="dark" lang="ja">
+<html class="light" lang="ja">
 <head>
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
@@ -9,104 +9,115 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
     <link href="src/css/common.css" rel="stylesheet"/>
+    <link href="src/css/layout.css" rel="stylesheet"/>
+    <link href="src/css/components.css" rel="stylesheet"/>
     <script id="tailwind-config">
         tailwind.config = {
             darkMode: "class",
             theme: {
                 extend: {
                     colors: {
-                        "primary": "#13ec5b",
-                        "background-light": "#f6f8f6",
-                        "background-dark": "#102216",
+                        "primary": "#2563eb",
+                        "background-light": "#ffffff",
+                        "background-dark": "#0f172a",
                     },
                     fontFamily: {
                         "display": ["Inter"]
                     },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
                 },
             },
         }
     </script>
 </head>
-<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-white min-h-screen">
-    <div class="flex h-screen overflow-hidden">
+<body class="page-body">
+    <div class="page-container">
         <!-- SideNavBar -->
-        <aside class="w-64 flex-shrink-0 border-r border-slate-200 dark:border-white/10 bg-white dark:bg-background-dark hidden lg:flex flex-col">
-            <div class="p-6 flex flex-col h-full">
-                <div class="flex items-center gap-3 mb-8">
-                    <div class="size-8 bg-primary rounded flex items-center justify-center text-background-dark">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">
+                    <div class="sidebar-logo-icon">
                         <span class="material-symbols-outlined font-bold">account_tree</span>
                     </div>
                     <div>
-                        <h1 class="text-white text-base font-bold leading-none">Daikon</h1>
-                        <p class="text-[#92c9a4] text-xs font-normal mt-1">v1.0.2</p>
+                        <h1 class="sidebar-logo-text">Daikon</h1>
+                        <p class="sidebar-version">v1.0.2</p>
                     </div>
                 </div>
-                <nav class="flex-1 space-y-1">
-                    <a class="flex items-center gap-3 px-3 py-2 rounded-lg bg-[#23482f] text-white" href="index.html">
+                <nav class="sidebar-nav">
+                    <a class="sidebar-nav-item sidebar-nav-item-active" href="index.html">
                         <span class="material-symbols-outlined">home</span>
-                        <span class="text-sm font-medium">ダッシュボード</span>
+                        <span class="text-sm font-medium sidebar-nav-text">ダッシュボード</span>
                     </a>
-                    <a class="flex items-center gap-3 px-3 py-2 text-slate-400 hover:text-white transition-colors" href="integrations.html">
+                    <a class="sidebar-nav-item" href="integrations.html">
                         <span class="material-symbols-outlined">settings_input_component</span>
-                        <span class="text-sm font-medium">統合設定</span>
+                        <span class="text-sm font-medium sidebar-nav-text">統合設定</span>
                     </a>
-                    <a class="flex items-center gap-3 px-3 py-2 text-slate-400 hover:text-white transition-colors" href="roadmap.html">
+                    <a class="sidebar-nav-item" href="roadmap.html">
                         <span class="material-symbols-outlined">map</span>
-                        <span class="text-sm font-medium">ロードマップ</span>
+                        <span class="text-sm font-medium sidebar-nav-text">ロードマップ</span>
                     </a>
                 </nav>
             </div>
         </aside>
 
         <!-- Main Content -->
-        <main class="flex-1 flex flex-col overflow-hidden">
-            <header class="h-16 border-b border-slate-200 dark:border-white/10 flex items-center justify-between px-8 bg-white dark:bg-background-dark/50 backdrop-blur-md z-10">
-                <h2 class="text-xl font-bold text-slate-900 dark:text-white">ダッシュボード</h2>
+        <main class="main-content">
+            <header class="page-header">
+                <h2 class="text-xl font-bold text-slate-900">ダッシュボード</h2>
             </header>
 
-            <div class="flex-1 overflow-y-auto p-8">
+            <div class="content-area">
                 <div class="max-w-6xl mx-auto space-y-6">
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        <div class="bg-white dark:bg-[#193322] border border-slate-200 dark:border-white/5 rounded-xl p-6">
-                            <div class="flex items-center justify-between mb-4">
-                                <h3 class="text-sm font-semibold text-slate-500 dark:text-[#92c9a4]">総アイテム数</h3>
-                                <span class="material-symbols-outlined text-primary">list</span>
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="flex items-center justify-between mb-4">
+                                    <h3 class="text-sm font-semibold text-slate-500">総アイテム数</h3>
+                                    <span class="material-symbols-outlined text-primary">list</span>
+                                </div>
+                                <p class="text-3xl font-bold text-slate-900" id="total-items">0</p>
                             </div>
-                            <p class="text-3xl font-bold text-slate-900 dark:text-white" id="total-items">0</p>
                         </div>
-                        <div class="bg-white dark:bg-[#193322] border border-slate-200 dark:border-white/5 rounded-xl p-6">
-                            <div class="flex items-center justify-between mb-4">
-                                <h3 class="text-sm font-semibold text-slate-500 dark:text-[#92c9a4]">GitHubアイテム</h3>
-                                <span class="material-symbols-outlined text-slate-400">terminal</span>
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="flex items-center justify-between mb-4">
+                                    <h3 class="text-sm font-semibold text-slate-500">GitHubアイテム</h3>
+                                    <span class="material-symbols-outlined text-slate-400">terminal</span>
+                                </div>
+                                <p class="text-3xl font-bold text-slate-900" id="github-items">0</p>
                             </div>
-                            <p class="text-3xl font-bold text-slate-900 dark:text-white" id="github-items">0</p>
                         </div>
-                        <div class="bg-white dark:bg-[#193322] border border-slate-200 dark:border-white/5 rounded-xl p-6">
-                            <div class="flex items-center justify-between mb-4">
-                                <h3 class="text-sm font-semibold text-slate-500 dark:text-[#92c9a4]">ロードマップアイテム</h3>
-                                <span class="material-symbols-outlined text-primary">table_chart</span>
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="flex items-center justify-between mb-4">
+                                    <h3 class="text-sm font-semibold text-slate-500">ロードマップアイテム</h3>
+                                    <span class="material-symbols-outlined text-primary">table_chart</span>
+                                </div>
+                                <p class="text-3xl font-bold text-slate-900" id="roadmap-items">0</p>
                             </div>
-                            <p class="text-3xl font-bold text-slate-900 dark:text-white" id="roadmap-items">0</p>
                         </div>
                     </div>
 
-                    <div class="bg-white dark:bg-[#193322] border border-slate-200 dark:border-white/5 rounded-xl p-6">
-                        <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-4">クイックアクション</h3>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <a href="integrations.html" class="flex items-center gap-3 p-4 border border-slate-200 dark:border-white/10 rounded-lg hover:bg-slate-50 dark:hover:bg-white/5 transition-colors">
-                                <span class="material-symbols-outlined text-primary">settings_input_component</span>
-                                <div>
-                                    <p class="font-medium text-slate-900 dark:text-white">データをインポート</p>
-                                    <p class="text-sm text-slate-500 dark:text-[#92c9a4]">GitHubやCSVファイルをアップロード</p>
-                                </div>
-                            </a>
-                            <a href="roadmap.html" class="flex items-center gap-3 p-4 border border-slate-200 dark:border-white/10 rounded-lg hover:bg-slate-50 dark:hover:bg-white/5 transition-colors">
-                                <span class="material-symbols-outlined text-primary">map</span>
-                                <div>
-                                    <p class="font-medium text-slate-900 dark:text-white">ロードマップを表示</p>
-                                    <p class="text-sm text-slate-500 dark:text-[#92c9a4]">タイムライン形式で確認</p>
-                                </div>
-                            </a>
+                    <div class="card">
+                        <div class="card-body">
+                            <h3 class="text-lg font-bold text-slate-900 mb-4">クイックアクション</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <a href="integrations.html" class="flex items-center gap-3 p-4 border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors">
+                                    <span class="material-symbols-outlined text-primary">settings_input_component</span>
+                                    <div>
+                                        <p class="font-medium text-slate-900">データをインポート</p>
+                                        <p class="text-sm text-slate-500">GitHubやCSVファイルをアップロード</p>
+                                    </div>
+                                </a>
+                                <a href="roadmap.html" class="flex items-center gap-3 p-4 border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors">
+                                    <span class="material-symbols-outlined text-primary">map</span>
+                                    <div>
+                                        <p class="font-medium text-slate-900">ロードマップを表示</p>
+                                        <p class="text-sm text-slate-500">タイムライン形式で確認</p>
+                                    </div>
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
