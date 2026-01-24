@@ -25,6 +25,13 @@
     flex-direction: column;
 }
 
+@media (prefers-color-scheme: dark) {
+    .sidebar {
+        border-right-color: rgba(255, 255, 255, 0.1);
+        background-color: #0f172a;
+    }
+}
+
 @media (min-width: 1024px) {
     .sidebar {
         display: flex;
@@ -63,11 +70,23 @@
     line-height: 1;
 }
 
+@media (prefers-color-scheme: dark) {
+    .sidebar-logo-text {
+        color: #ffffff;
+    }
+}
+
 .sidebar-version {
     color: #64748b;
     font-size: 0.75rem;
     font-weight: 400;
     margin-top: 0.25rem;
+}
+
+@media (prefers-color-scheme: dark) {
+    .sidebar-version {
+        color: #94a3b8;
+    }
 }
 
 .sidebar-nav {
@@ -88,6 +107,12 @@
     text-decoration: none;
 }
 
+@media (prefers-color-scheme: dark) {
+    .sidebar-nav-item {
+        color: #94a3b8;
+    }
+}
+
 .sidebar-nav-text {
     font-size: 0.875rem;
     font-weight: 500;
@@ -98,9 +123,23 @@
     background-color: #eff6ff;
 }
 
+@media (prefers-color-scheme: dark) {
+    .sidebar-nav-item:hover {
+        color: #ffffff;
+        background-color: rgba(255, 255, 255, 0.05);
+    }
+}
+
 .sidebar-nav-item-active {
     background-color: rgba(37, 99, 235, 0.1);
     color: #2563eb;
+}
+
+@media (prefers-color-scheme: dark) {
+    .sidebar-nav-item-active {
+        background-color: rgba(255, 255, 255, 0.1);
+        color: #ffffff;
+    }
 }
 
 /* メインコンテンツエリア */
