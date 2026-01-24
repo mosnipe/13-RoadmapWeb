@@ -235,40 +235,117 @@ class RoadmapViewer {
       
       const { jsPDF } = window.jspdf;
       
+      // タイトルとコンテンツを含む親要素を取得
+      const titleEl = document.getElementById('roadmap-title');
       const content = document.getElementById('roadmap-content');
-      const title = document.getElementById('roadmap-title').textContent;
       
-      // まず画像としてキャプチャ
-      const canvas = await html2canvas(content, {
-        backgroundColor: document.documentElement.classList.contains('dark') ? '#0f172a' : '#ffffff',
-        scale: 2,
-        logging: false
-      });
-      
-      const imgData = canvas.toDataURL('image/png');
-      const imgWidth = 210; // A4 width in mm
-      const pageHeight = 297; // A4 height in mm
-      const imgHeight = (canvas.height * imgWidth) / canvas.width;
-      let heightLeft = imgHeight;
-      
-      const doc = new jsPDF('p', 'mm', 'a4');
-      let position = 0;
+      // エクスポート用の一時的なコンテナを作成
+      const exportContainer = document.createElement('div');
+      exportContainer.style.position = 'absolute';
+      exportContainer.style.left = '-9999px';
+      exportContainer.style.top = '0';
+      exportContainer.style.width = '794px'; // A4幅（210mm）をピクセルに変換（96 DPI基準）
+      exportContainer.style.backgroundColor = document.documentElement.classList.contains('dark') ? '#0f172a' : '#ffffff';
+      exportContainer.style.padding = '40px';
+      exportContainer.style.fontFamily = 'Inter, "Noto Sans JP", sans-serif';
+      exportContainer.style.color = document.documentElement.classList.contains('dark') ? '#f1f5f9' : '#1e293b';
       
       // タイトルを追加
-      doc.setFontSize(20);
-      doc.text(title, 20, 20);
-      position = 30;
+      const titleClone = titleEl.cloneNode(true);
+      titleClone.style.fontSize = '28px';
+      titleClone.style.fontWeight = 'bold';
+      titleClone.style.marginBottom = '24px';
+      titleClone.style.color = document.documentElement.classList.contains('dark') ? '#ffffff' : '#1e293b';
+      exportContainer.appendChild(titleClone);
       
-      // 画像を追加
-      doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-      heightLeft -= pageHeight;
+      // コンテンツを追加（スタイルを継承）
+      const contentClone = content.cloneNode(true);
+      exportContainer.appendChild(contentClone);
+      
+      document.body.appendChild(exportContainer);
+      
+      // 画像としてキャプチャ
+      const canvas = await html2canvas(exportContainer, {
+        backgroundColor: document.documentElement.classList.contains('dark') ? '#0f172a' : '#ffffff',
+        scale: 2,
+        logging: false,
+        useCORS: true,
+        allowTaint: true,
+        width: exportContainer.offsetWidth,
+        height: exportContainer.offsetHeight
+      });
+      
+      // 一時コンテナを削除
+      document.body.removeChild(exportContainer);
+      
+      const imgData = canvas.toDataURL('image/png', 1.0);
+      
+      // A4サイズの設定（mm単位）
+      const a4Width = 210; // A4 width in mm
+      const a4Height = 297; // A4 height in mm
+      const margin = 10; // マージン（mm）
+      const contentWidth = a4Width - (margin * 2);
+      const contentHeight = a4Height - (margin * 2);
+      
+      // 画像のアスペクト比を維持しながらA4サイズに収める
+      const imgAspectRatio = canvas.width / canvas.height;
+      const contentAspectRatio = contentWidth / contentHeight;
+      
+      let imgWidth, imgHeight;
+      if (imgAspectRatio > contentAspectRatio) {
+        // 画像が横長の場合、幅に合わせる
+        imgWidth = contentWidth;
+        imgHeight = contentWidth / imgAspectRatio;
+      } else {
+        // 画像が縦長の場合、高さに合わせる
+        imgHeight = contentHeight;
+        imgWidth = contentHeight * imgAspectRatio;
+      }
+      
+      const doc = new jsPDF('p', 'mm', 'a4');
+      let yPosition = margin;
+      let remainingHeight = imgHeight;
+      
+      // 最初のページに画像を追加
+      const firstPageHeight = Math.min(imgHeight, contentHeight);
+      doc.addImage(imgData, 'PNG', margin, yPosition, imgWidth, firstPageHeight, undefined, 'FAST');
+      remainingHeight -= firstPageHeight;
       
       // 複数ページ対応
-      while (heightLeft >= 0) {
-        position = heightLeft - imgHeight;
+      while (remainingHeight > 0) {
         doc.addPage();
-        doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-        heightLeft -= pageHeight;
+        yPosition = margin;
+        const pageHeight = Math.min(remainingHeight, contentHeight);
+        
+        // 画像の一部を次のページに表示するため、ソース位置を計算
+        const sourceY = (imgHeight - remainingHeight) / imgHeight;
+        const sourceHeight = pageHeight / imgHeight;
+        
+        // 画像の一部を切り出すための一時キャンバス
+        const tempCanvas = document.createElement('canvas');
+        const sourceYInPixels = Math.floor(sourceY * canvas.height);
+        const sourceHeightInPixels = Math.ceil(sourceHeight * canvas.height);
+        
+        tempCanvas.width = canvas.width;
+        tempCanvas.height = sourceHeightInPixels;
+        const ctx = tempCanvas.getContext('2d');
+        
+        // ソース画像から必要な部分をコピー
+        ctx.drawImage(
+          canvas,
+          0, sourceYInPixels,
+          canvas.width, sourceHeightInPixels,
+          0, 0,
+          tempCanvas.width, tempCanvas.height
+        );
+        
+        const pageImgData = tempCanvas.toDataURL('image/png', 1.0);
+        const pageImgWidth = imgWidth;
+        const pageImgHeightScaled = (tempCanvas.height / tempCanvas.width) * pageImgWidth;
+        
+        doc.addImage(pageImgData, 'PNG', margin, yPosition, pageImgWidth, pageImgHeightScaled, undefined, 'FAST');
+        
+        remainingHeight -= pageHeight;
       }
       
       doc.save('roadmap.pdf');
