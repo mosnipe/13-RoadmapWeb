@@ -236,4 +236,37 @@ export class FileParser {
     }
     return status;
   }
+
+  /**
+   * GitHub APIのコミットデータを内部形式に変換
+   */
+  static parseGitHubCommits(commits) {
+    if (!Array.isArray(commits)) {
+      commits = [commits];
+    }
+    
+    return commits.map((commit, index) => {
+      // GitHub API形式のコミットデータをパース
+      const commitMessage = commit.commit?.message || commit.message || '';
+      const commitDate = commit.commit?.author?.date || commit.commit?.committer?.date || commit.date || new Date().toISOString();
+      const author = commit.author?.login || commit.commit?.author?.name || 'Unknown';
+      const sha = commit.sha || commit.id || `commit-${index}`;
+      
+      // コミットメッセージの最初の行をタイトルとして使用
+      const title = commitMessage.split('\n')[0].trim() || `コミット ${sha.substring(0, 7)}`;
+      
+      return {
+        id: `gh-commit-${sha}`,
+        source: 'github',
+        sourceId: `COMMIT-${sha.substring(0, 7)}`,
+        title: title,
+        status: 'Merged', // コミットは既にマージされている
+        assignee: author,
+        date: commitDate,
+        category: 'Commit',
+        description: commitMessage,
+        url: commit.html_url || commit.url || ''
+      };
+    });
+  }
 }

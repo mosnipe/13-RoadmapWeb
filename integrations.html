@@ -114,16 +114,16 @@
                         <div class="card-body">
                             <!-- Connection Type Tabs -->
                             <div class="tab-container">
-                                <button type="button" id="tab-api" class="tab-button tab-button-inactive">
+                                <button type="button" id="tab-api" class="tab-button tab-button-active">
                                     API接続
                                 </button>
-                                <button type="button" id="tab-file" class="tab-button tab-button-active">
+                                <button type="button" id="tab-file" class="tab-button tab-button-inactive">
                                     ファイル読み込み
                                 </button>
                             </div>
 
                             <!-- API Connection Section -->
-                            <div id="api-connection-section" class="section hidden">
+                            <div id="api-connection-section" class="section">
                                 <div class="form-group">
                                     <label class="form-label">リポジトリURL</label>
                                     <input type="text" id="github-repo-url" class="form-input" placeholder="https://github.com/owner/repo"/>
@@ -139,7 +139,7 @@
                             </div>
 
                             <!-- File Upload Section -->
-                            <div id="file-upload-section" class="section">
+                            <div id="file-upload-section" class="section hidden">
                                 <div class="form-group">
                                     <label class="form-label">プルリクエスト (JSON)</label>
                                     <div id="pr-drop-zone" class="file-drop-zone file-upload-area">

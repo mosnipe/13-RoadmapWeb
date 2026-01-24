@@ -101,8 +101,8 @@ class RoadmapViewer {
     const itemDate = new Date(year, month - 1);
     const isPast = itemDate < now;
     
-    // カテゴリでグループ化
-    const byCategory = this.groupByCategory(items);
+    // 日付でグループ化
+    const byDate = this.groupByDate(items);
     
     let html = `
       <div class="relative pl-16">
@@ -118,14 +118,50 @@ class RoadmapViewer {
       html += `<h2 class="text-2xl font-bold text-slate-800 dark:text-slate-100 mb-4">${year}年${monthName}のリリース予定</h2>`;
     }
 
-    // カテゴリごとに表示
-    Object.keys(byCategory).forEach(category => {
-      const categoryItems = byCategory[category];
-      html += this.renderCategory(category, categoryItems);
+    // 日付ごとに表示
+    const sortedDates = Object.keys(byDate).sort();
+    sortedDates.forEach((dateKey, index) => {
+      const dateItems = byDate[dateKey];
+      const date = new Date(dateKey);
+      const day = date.getDate();
+      
+      // 日付ラベルを表示
+      html += `<div class="mb-6 ${index > 0 ? 'mt-8' : ''}">`;
+      html += `<h3 class="text-lg font-semibold text-slate-700 dark:text-slate-300 mb-4">${day}日</h3>`;
+      
+      // カテゴリでグループ化
+      const byCategory = this.groupByCategory(dateItems);
+      
+      // カテゴリごとに表示
+      Object.keys(byCategory).forEach(category => {
+        const categoryItems = byCategory[category];
+        html += this.renderCategory(category, categoryItems);
+      });
+      
+      html += '</div>';
     });
 
     html += '</div></div>';
     return html;
+  }
+
+  groupByDate(items) {
+    const grouped = {};
+    
+    items.forEach(item => {
+      const date = new Date(item.date);
+      const year = date.getFullYear();
+      const month = date.getMonth() + 1;
+      const day = date.getDate();
+      const key = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+      
+      if (!grouped[key]) {
+        grouped[key] = [];
+      }
+      grouped[key].push(item);
+    });
+
+    return grouped;
   }
 
   groupByCategory(items) {

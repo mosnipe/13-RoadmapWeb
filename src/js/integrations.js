@@ -11,8 +11,11 @@ class IntegrationsManager {
     this.csvData = [];
     this.githubPRData = [];
     this.githubIssueData = [];
+    this.githubCommitData = []; // APIから取得したコミットデータ
     this.columnMapping = StorageManager.getColumnMapping();
     this.allRoadmapData = [];
+    this.githubRepoUrl = '';
+    this.githubToken = '';
     
     this.init();
   }
@@ -21,8 +24,8 @@ class IntegrationsManager {
     this.setupEventListeners();
     this.loadSavedData();
     this.updatePreview();
-    // 初期状態でファイル読み込みタブを表示
-    this.switchTab('file');
+    // 初期状態でAPI接続タブを表示
+    this.switchTab('api');
   }
 
   setupEventListeners() {
@@ -30,30 +33,18 @@ class IntegrationsManager {
     const tabApi = document.getElementById('tab-api');
     const tabFile = document.getElementById('tab-file');
 
-    console.log('[DEBUG] setupEventListeners開始');
-    console.log('[DEBUG] tab-api要素:', tabApi);
-    console.log('[DEBUG] tab-file要素:', tabFile);
-
     if (tabApi) {
-      console.log('[DEBUG] tab-apiのイベントリスナーを設定します');
       tabApi.addEventListener('click', (e) => {
-        console.log('[DEBUG] tab-apiがクリックされました');
         e.preventDefault();
         this.switchTab('api');
       });
-    } else {
-      console.error('[DEBUG] tab-api要素が見つかりませんでした');
     }
 
     if (tabFile) {
-      console.log('[DEBUG] tab-fileのイベントリスナーを設定します');
       tabFile.addEventListener('click', (e) => {
-        console.log('[DEBUG] tab-fileがクリックされました');
         e.preventDefault();
         this.switchTab('file');
       });
-    } else {
-      console.error('[DEBUG] tab-file要素が見つかりませんでした');
     }
 
     // GitHubファイルアップロード
@@ -107,28 +98,26 @@ class IntegrationsManager {
     document.getElementById('finalizeBtn')?.addEventListener('click', () => {
       window.location.href = 'roadmap.html';
     });
+
+    // GitHub API接続テストボタン
+    document.getElementById('test-connection-btn')?.addEventListener('click', () => {
+      this.testGitHubConnection();
+    });
   }
 
   switchTab(tab) {
-    console.log('[DEBUG] switchTab呼び出し:', tab);
     const tabApi = document.getElementById('tab-api');
     const tabFile = document.getElementById('tab-file');
     const apiSection = document.getElementById('api-connection-section');
     const fileSection = document.getElementById('file-upload-section');
 
-    console.log('[DEBUG] 要素の取得結果:');
-    console.log('  - tabApi:', tabApi);
-    console.log('  - tabFile:', tabFile);
-    console.log('  - apiSection:', apiSection);
-    console.log('  - fileSection:', fileSection);
-
     if (!tabApi || !tabFile) {
-      console.error('[DEBUG] タブ要素が見つかりません');
+      console.error('タブ要素が見つかりません');
       return;
     }
 
     if (!apiSection || !fileSection) {
-      console.error('[DEBUG] セクション要素が見つかりません');
+      console.error('セクション要素が見つかりません');
       return;
     }
 
@@ -293,10 +282,11 @@ class IntegrationsManager {
     const tbody = document.getElementById('preview-table-body');
     if (!tbody) return;
 
-    // データを統合
+    // データを統合（コミットデータも含める）
     this.allRoadmapData = [
       ...this.githubPRData,
       ...this.githubIssueData,
+      ...this.githubCommitData,
       ...(this.csvData.length > 0 ? FileParser.mapCSVData(this.csvData, this.columnMapping) : [])
     ];
 
@@ -383,13 +373,155 @@ class IntegrationsManager {
 
   updateGitHubStatus() {
     const statusEl = document.getElementById('githubStatus');
-    if (this.githubPRFile || this.githubIssueFile) {
+    if (this.githubPRFile || this.githubIssueFile || this.githubCommitData.length > 0) {
       statusEl.textContent = '接続済み';
       statusEl.className = 'status-badge status-badge-connected';
     } else {
       statusEl.textContent = '未接続';
       statusEl.className = 'status-badge status-badge-disconnected';
     }
+  }
+
+  /**
+   * リポジトリURLからowner/repoを抽出
+   */
+  parseRepositoryUrl(url) {
+    if (!url) {
+      throw new Error('リポジトリURLが入力されていません');
+    }
+
+    // https://github.com/owner/repo 形式を想定
+    const match = url.match(/github\.com[/:]([^/]+)\/([^/]+?)(?:\.git)?\/?$/);
+    if (!match) {
+      throw new Error('無効なリポジトリURL形式です。例: https://github.com/owner/repo');
+    }
+
+    return {
+      owner: match[1],
+      repo: match[2].replace(/\.git$/, '')
+    };
+  }
+
+  /**
+   * GitHub APIへの接続テストとコミット情報の取得
+   */
+  async testGitHubConnection() {
+    const repoUrlInput = document.getElementById('github-repo-url');
+    const tokenInput = document.getElementById('github-token');
+    const testBtn = document.getElementById('test-connection-btn');
+
+    if (!repoUrlInput || !tokenInput || !testBtn) {
+      console.error('必要な要素が見つかりません');
+      return;
+    }
+
+    const repoUrl = repoUrlInput.value.trim();
+    const token = tokenInput.value.trim();
+
+    if (!repoUrl) {
+      alert('リポジトリURLを入力してください');
+      return;
+    }
+
+    // ボタンを無効化してローディング状態に
+    const originalText = testBtn.textContent;
+    testBtn.disabled = true;
+    testBtn.textContent = '接続中...';
+
+    try {
+      // リポジトリ情報を抽出
+      const { owner, repo } = this.parseRepositoryUrl(repoUrl);
+      this.githubRepoUrl = repoUrl;
+      this.githubToken = token;
+
+      // GitHub APIでリポジトリ情報を取得して接続テスト
+      const repoInfo = await this.fetchGitHubRepository(owner, repo, token);
+      
+      if (!repoInfo) {
+        throw new Error('リポジトリ情報の取得に失敗しました');
+      }
+
+      // コミット情報を取得
+      const commits = await this.fetchGitHubCommits(owner, repo, token);
+      
+      if (commits && commits.length > 0) {
+        // コミットデータをロードマップ形式に変換
+        this.githubCommitData = FileParser.parseGitHubCommits(commits);
+        
+        // プレビューを更新
+        this.updatePreview();
+        this.updateGitHubStatus();
+        
+        alert(`接続成功！\nリポジトリ: ${repoInfo.full_name}\nコミット数: ${commits.length}件`);
+      } else {
+        alert('接続成功しましたが、コミットが見つかりませんでした');
+      }
+    } catch (error) {
+      console.error('GitHub接続エラー:', error);
+      alert(`接続に失敗しました: ${error.message}`);
+    } finally {
+      // ボタンを元に戻す
+      testBtn.disabled = false;
+      testBtn.textContent = originalText;
+    }
+  }
+
+  /**
+   * GitHub APIからリポジトリ情報を取得（接続テスト用）
+   */
+  async fetchGitHubRepository(owner, repo, token) {
+    const url = `https://api.github.com/repos/${owner}/${repo}`;
+    const headers = {
+      'Accept': 'application/vnd.github.v3+json'
+    };
+
+    if (token) {
+      headers['Authorization'] = `token ${token}`;
+    }
+
+    const response = await fetch(url, { headers });
+
+    if (!response.ok) {
+      if (response.status === 404) {
+        throw new Error('リポジトリが見つかりません');
+      } else if (response.status === 401) {
+        throw new Error('認証に失敗しました。トークンを確認してください');
+      } else if (response.status === 403) {
+        throw new Error('アクセスが拒否されました。トークンの権限を確認してください');
+      }
+      throw new Error(`APIエラー: ${response.status} ${response.statusText}`);
+    }
+
+    return await response.json();
+  }
+
+  /**
+   * GitHub APIからコミット情報を取得
+   */
+  async fetchGitHubCommits(owner, repo, token, perPage = 100) {
+    const url = `https://api.github.com/repos/${owner}/${repo}/commits?per_page=${perPage}`;
+    const headers = {
+      'Accept': 'application/vnd.github.v3+json'
+    };
+
+    if (token) {
+      headers['Authorization'] = `token ${token}`;
+    }
+
+    const response = await fetch(url, { headers });
+
+    if (!response.ok) {
+      if (response.status === 404) {
+        throw new Error('リポジトリが見つかりません');
+      } else if (response.status === 401) {
+        throw new Error('認証に失敗しました。トークンを確認してください');
+      } else if (response.status === 403) {
+        throw new Error('アクセスが拒否されました。トークンの権限を確認してください');
+      }
+      throw new Error(`APIエラー: ${response.status} ${response.statusText}`);
+    }
+
+    return await response.json();
   }
 
   saveAll() {
@@ -404,6 +536,18 @@ class IntegrationsManager {
     
     if (this.githubPRFile || this.githubIssueFile) {
       StorageManager.saveGitHubFiles(this.githubPRFile, this.githubIssueFile);
+    }
+
+    // API接続情報を保存（トークンは保存しない）
+    if (this.githubRepoUrl) {
+      StorageManager.set(CONFIG.STORAGE_KEYS.GITHUB_FILES, {
+        ...StorageManager.get(CONFIG.STORAGE_KEYS.GITHUB_FILES, {}),
+        apiConnection: {
+          repoUrl: this.githubRepoUrl,
+          lastSync: new Date().toISOString(),
+          commitCount: this.githubCommitData.length
+        }
+      });
     }
 
     alert('設定を保存しました！');
