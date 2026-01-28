@@ -10,32 +10,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <link href="dist/tailwind.css" rel="stylesheet"/>
     <link href="src/css/common.css" rel="stylesheet"/>
     <link href="src/css/layout.css" rel="stylesheet"/>
     <link href="src/css/roadmap.css" rel="stylesheet"/>
     <link href="src/css/roadmap-status.css" rel="stylesheet"/>
-    <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
-    <script>
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    colors: {
-                        primary: "#1e3a8a", // Deep Blue
-                        "background-light": "#ffffff",
-                        "background-dark": "#0f172a",
-                    },
-                    fontFamily: {
-                        display: ["Inter", "Noto Sans JP", "sans-serif"],
-                        sans: ["Inter", "Noto Sans JP", "sans-serif"],
-                    },
-                    borderRadius: {
-                        DEFAULT: "0.5rem",
-                    },
-                },
-            },
-        };
-    </script>
 </head>
 <body class="page-body bg-background-light dark:bg-background-dark text-slate-800 dark:text-slate-200 min-h-screen transition-colors duration-200">
     <div class="page-container">

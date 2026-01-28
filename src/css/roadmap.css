@@ -7,6 +7,19 @@ body {
     font-family: 'Inter', 'Noto Sans JP', sans-serif;
 }
 
+/* ロードマップページ専用のプライマリカラー（Deep Blue: #1e3a8a） */
+.bg-primary {
+    background-color: #1e3a8a !important;
+}
+
+.text-primary {
+    color: #1e3a8a !important;
+}
+
+.hover\:text-primary:hover {
+    color: #1e3a8a !important;
+}
+
 /* タイムラインの縦線 */
 .timeline-line {
     position: absolute;
