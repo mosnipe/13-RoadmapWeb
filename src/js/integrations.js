@@ -16,6 +16,7 @@ class IntegrationsManager {
     this.allRoadmapData = [];
     this.githubRepoUrl = '';
     this.githubToken = '';
+    this.showAllItems = false; // すべての件数を表示するかどうか
     
     this.init();
   }
@@ -301,9 +302,11 @@ class IntegrationsManager {
       return;
     }
 
-    // プレビューテーブル生成（最大10件）
+    // プレビューテーブル生成（最大10件、またはすべて表示）
     const MAX_PREVIEW_ITEMS = 10;
-    const previewItems = this.allRoadmapData.slice(0, MAX_PREVIEW_ITEMS);
+    const previewItems = this.showAllItems 
+      ? this.allRoadmapData 
+      : this.allRoadmapData.slice(0, MAX_PREVIEW_ITEMS);
     
     tbody.innerHTML = previewItems.map(roadmapItem => {
       const sourceIcon = roadmapItem.source === 'github' ? 'terminal' : 'table_chart';
@@ -328,17 +331,27 @@ class IntegrationsManager {
       `;
     }).join('');
 
-    if (this.allRoadmapData.length > MAX_PREVIEW_ITEMS) {
+    // すべての件数を表示するボタン（10件以上の場合のみ表示、かつまだすべて表示していない場合）
+    if (this.allRoadmapData.length > MAX_PREVIEW_ITEMS && !this.showAllItems) {
       const totalCount = this.allRoadmapData.length;
       tbody.innerHTML += `
         <tr>
           <td colspan="5" class="data-table-empty">
-            <button class="text-xs font-bold text-slate-500 hover:text-primary uppercase tracking-widest">
+            <button id="show-all-items-btn" class="text-xs font-bold text-slate-500 hover:text-primary uppercase tracking-widest">
               すべての ${totalCount} 件を表示
             </button>
           </td>
         </tr>
       `;
+      
+      // ボタンにイベントリスナーを追加
+      const showAllBtn = document.getElementById('show-all-items-btn');
+      if (showAllBtn) {
+        showAllBtn.addEventListener('click', () => {
+          this.showAllItems = true;
+          this.updatePreview();
+        });
+      }
     }
   }
 
